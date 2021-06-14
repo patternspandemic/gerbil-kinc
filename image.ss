@@ -14,8 +14,8 @@
             KINC_IMAGE_FORMAT_A32
             KINC_IMAGE_FORMAT_BGRA32
             KINC_IMAGE_FORMAT_A16
-            (struct kinc_image width height depth format internal_format compression data data_size)
-            (struct kinc_image_read_callbacks read seek pos size)
+            (struct kinc_image_t width height depth format internal_format compression data data_size)
+            (struct kinc_image_read_callbacks_t read seek pos size)
             kinc-image-init
             kinc-image-init3d
             kinc-image-size-from-file
@@ -31,7 +31,6 @@
             kinc-image-get-pixels
             kinc-image-format-sizeof)
 
-    (c-declare "#include <kinc/pch.h>")
     (c-declare "#include <kinc/image.h>")
   
     (c-define-type int* (pointer int))
@@ -42,15 +41,13 @@
     (c-define-type uint8-t unsigned-int8)
     (c-define-type uint8-t* (pointer uint8-t))
 
-    ; typedef enum kinc_image_compression kinc_image_compression_t
-    (c-define-type kinc-image-compression-t int)
+    (c-define-type kinc_image_compression_t int)
     (define KINC_IMAGE_COMPRESSION_NONE 0)
     (define KINC_IMAGE_COMPRESSION_DXT5 1)
     (define KINC_IMAGE_COMPRESSION_ASTC 2)
     (define KINC_IMAGE_COMPRESSION_PVRTC 3)
 
-    ; typedef enum kinc_image_format kinc_image_format_t
-    (c-define-type kinc-image-format-t int)
+    (c-define-type kinc_image_format_t int)
     (define KINC_IMAGE_FORMAT_RGBA32 0)
     (define KINC_IMAGE_FORMAT_GREY8 1)
     (define KINC_IMAGE_FORMAT_RGB24 2)
@@ -60,39 +57,38 @@
     (define KINC_IMAGE_FORMAT_BGRA32 6)
     (define KINC_IMAGE_FORMAT_A16 7)
 
-    ; TODO: Release function for kinc_image struct?
-    ; typedef struct kinc_image kinc_image_t
-    (c-define-type kinc-image-t (type "kinc_image_t"))
-    (c-define-type kinc-image-t* (pointer kinc-image-t))
-    (define-c-struct kinc_image
+    (define-c-struct kinc_image_t
       ((width . int)
        (height . int)
        (depth . int)
-       (format . kinc-image-format-t)
+       (format . kinc_image_format_t)
        (internal_format . unsigned-int)
-       (compression . kinc-image-compression-t)
+       (compression . kinc_image_compression_t)
        (data . void*)
-       (data_size . int)))
+       (data_size . int))
+       #f #f 'as-typedef)
 
-    ; typedef struct kinc_image_read_callbacks kinc_image_read_callbacks_t
-    (c-define-type kinc-image-read-callbacks-t (type "kinc_image_read_callbacks_t"))
-    (define-c-struct kinc_image_read_callbacks
+    (define-c-struct kinc_image_read_callbacks_t
       ((read . (function (void* void* size-t) int))
        (seek . (function (void* int) void))
        (pos . (function (void*) int))
-       (size . (function (void*) size-t))))
+       (size . (function (void*) size-t)))
+       #f #f 'as-typedef)
 
-    (define-c-lambda kinc-image-init (kinc-image-t* void* int int kinc-image-format-t) size-t "kinc_image_init")
-    (define-c-lambda kinc-image-init3d (kinc-image-t* void* int int int kinc-image-format-t) size-t "kinc_image_init3d")
+    (define-c-lambda kinc-image-init (kinc_image_t* void* int int kinc_image_format_t) size-t "kinc_image_init")
+    (define-c-lambda kinc-image-init3d (kinc_image_t* void* int int int kinc_image_format_t) size-t "kinc_image_init3d")
     (define-c-lambda kinc-image-size-from-file (char*) size-t "kinc_image_size_from_file")
-    (define-c-lambda kinc-image-size-from-callbacks (kinc-image-read-callbacks-t void* char*) size-t "kinc_image_size_from_callbacks")
+    (define-c-lambda kinc-image-size-from-callbacks (kinc_image_read_callbacks_t void* char*) size-t "kinc_image_size_from_callbacks")
     (define-c-lambda kinc-image-size-from-encoded-bytes (void* size-t char*) size-t "kinc_image_size_from_encoded_bytes")
-    (define-c-lambda kinc-image-init-from-file (kinc-image-t* void* char*) size-t "kinc_image_init_from_file")
-    (define-c-lambda kinc-image-init-from-callbacks (kinc-image-t* void* kinc-image-read-callbacks-t void* char*) size-t "kinc_image_init_from_callbacks")
-    (define-c-lambda kinc-image-init-from-encoded-bytes (kinc-image-t* void* void* size-t char*) size-t "kinc_image_init_from_encoded_bytes")
-    (define-c-lambda kinc-image-init-from-bytes (kinc-image-t* void* int int kinc-image-format-t) void "kinc_image_init_from_bytes")
-    (define-c-lambda kinc-image-init-from-bytes3d (kinc-image-t* void* int int int kinc-image-format-t) void "kinc_image_init_from_bytes3d")
-    (define-c-lambda kinc-image-destroy (kinc-image-t*) void "kinc_image_destroy")
-    (define-c-lambda kinc-image-at (kinc-image-t* int int) int "kinc_image_at")
-    (define-c-lambda kinc-image-get-pixels (kinc-image-t*) uint8-t* "kinc_image_get_pixels")
-    (define-c-lambda kinc-image-format-sizeof (kinc-image-format-t) int "kinc_image_format_sizeof"))
+    (define-c-lambda kinc-image-init-from-file (kinc_image_t* void* char*) size-t "kinc_image_init_from_file")
+    (define-c-lambda kinc-image-init-from-callbacks (kinc_image_t* void* kinc_image_read_callbacks_t void* char*) size-t "kinc_image_init_from_callbacks")
+    (define-c-lambda kinc-image-init-from-encoded-bytes (kinc_image_t* void* void* size-t char*) size-t "kinc_image_init_from_encoded_bytes")
+    (define-c-lambda kinc-image-init-from-bytes (kinc_image_t* void* int int kinc_image_format_t) void "kinc_image_init_from_bytes")
+    (define-c-lambda kinc-image-init-from-bytes3d (kinc_image_t* void* int int int kinc_image_format_t) void "kinc_image_init_from_bytes3d")
+    (define-c-lambda kinc-image-destroy (kinc_image_t*) void "kinc_image_destroy")
+    (define-c-lambda kinc-image-at (kinc_image_t* int int) int "kinc_image_at")
+    (define-c-lambda kinc-image-get-pixels (kinc_image_t*) uint8-t* "kinc_image_get_pixels")
+    (define-c-lambda kinc-image-format-sizeof (kinc_image_format_t) int "kinc_image_format_sizeof"))
+
+; TODO: kinc_image_read_callbacks_t - How to assign Scheme procs as callbacks?
+; TODO: kinc-image-size-from-callbacks & kinc-image-init-from-callbacks - How to deal with kinc_image_read_callbacks_t by value?

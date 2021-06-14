@@ -12,7 +12,6 @@
             KINC_COLOR_CYAN
             kinc-color-components)
 
-  (c-declare "#include <kinc/pch.h>")
   (c-declare "#include <kinc/color.h>")
   
   (c-define-type uint32-t unsigned-int32)
@@ -27,4 +26,6 @@
   (define KINC_COLOR_YELLOW ((c-lambda () unsigned-long "___return(KINC_COLOR_YELLOW);")))
   (define KINC_COLOR_CYAN ((c-lambda () unsigned-long "___return(KINC_COLOR_CYAN);")))
 
-  (define-c-lambda kinc-color-components (uint32-t float* float* float* float*) void "kinc_color_components"))
+  ; TODO: kinc_color_components - Replace with pure Scheme call.
+  ;(define-c-lambda kinc-color-components (uint32-t float* float* float* float*) void "kinc_color_components")
+  )
