@@ -66,14 +66,14 @@
        (compression . kinc_image_compression_t)
        (data . void*)
        (data_size . int))
-       #f #f 'as-typedef)
+      #f #f 'as-typedef)
 
     (define-c-struct kinc_image_read_callbacks_t
       ((read . (function (void* void* size-t) int))
        (seek . (function (void* int) void))
        (pos . (function (void*) int))
        (size . (function (void*) size-t)))
-       #f #f 'as-typedef)
+      #f #f 'as-typedef)
 
     (define-c-lambda kinc-image-init (kinc_image_t* void* int int kinc_image_format_t) size-t "kinc_image_init")
     (define-c-lambda kinc-image-init3d (kinc_image_t* void* int int int kinc_image_format_t) size-t "kinc_image_init3d")

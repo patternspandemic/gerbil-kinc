@@ -1,3 +1,4 @@
+; TODO: window.ss - Most not implemented upstream.
 (import :std/foreign)
 
 (export #t)
@@ -54,23 +55,23 @@
 
   (define-c-struct kinc_framebuffer_options_t
     ((frequency . int)
-    (vertical_sync . bool)
-    (color_bits . int)
-    (depth_bits . int)
-    (stencil_bits . int)
-    (samples_per_pixel . int))
+     (vertical_sync . bool)
+     (color_bits . int)
+     (depth_bits . int)
+     (stencil_bits . int)
+     (samples_per_pixel . int))
     #f #f 'as-typedef)
 
   (define-c-struct kinc_window_options_t
     ((title . char*) ; TODO: const char *title; - deal with const?
-    (x . int)
-    (y . int)
-    (width . int)
-    (height . int)
-    (display_index . int)
-    (visible . bool)
-    (window_features . int)
-    (mode . kinc_window_mode_t))
+     (x . int)
+     (y . int)
+     (width . int)
+     (height . int)
+     (display_index . int)
+     (visible . bool)
+     (window_features . int)
+     (mode . kinc_window_mode_t))
     #f #f 'as-typedef)
 
   (define-c-lambda kinc-window-create (kinc_window_options_t* kinc_framebuffer_options_t*) int "kinc_window_create")
