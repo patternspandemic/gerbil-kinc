@@ -24,7 +24,7 @@
      (pixels_per_inch . int)
      (frequency . int)
      (bits_per_pixel . int))
-     #f #f 'as-typedef)
+    #f #f 'as-typedef)
 
   (define-c-lambda kinc-display-init () void "kinc_display_init")
   (define-c-lambda kinc-primary-display () int "kinc_primary_display")
