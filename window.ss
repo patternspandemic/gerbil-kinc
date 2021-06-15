@@ -11,8 +11,8 @@
             KINC_WINDOW_FEATURE_MAXIMIZABLE
             KINC_WINDOW_FEATURE_BORDERLESS
             KINC_WINDOW_FEATURE_ON_TOP
-            (struct kinc_framebuffer_options_t frequency vertical_sync color_bits depth_bits stencil_bits samples_per_pixel)
-            (struct kinc_window_options_t title x y width height display_index visible window_features mode)
+            (struct kinc_framebuffer_options frequency vertical_sync color_bits depth_bits stencil_bits samples_per_pixel)
+            (struct kinc_window_options title x y width height display_index visible window_features mode)
             kinc-window-create
             kinc-window-destroy
             kinc-count-windows
@@ -39,6 +39,14 @@
 
   (c-define-type void* (pointer void))
   (c-define-type char* char-string)
+  (c-define-type kinc_framebuffer_options_t
+    (type "kinc_framebuffer_options_t" (kinc_framebuffer_options_t kinc_framebuffer_options)))
+  (c-define-type kinc_framebuffer_options_t*
+    (pointer kinc_framebuffer_options_t (kinc_framebuffer_options_t* kinc_framebuffer_options*)))
+  (c-define-type kinc_window_options_t
+    (type "kinc_window_options_t" (kinc_window_options_t kinc_window_options)))
+  (c-define-type kinc_window_options_t*
+    (pointer kinc_window_options_t (kinc_window_options_t* kinc_window_options*)))
   (c-define-type resize-callback (function (int int void*) void)) ; void(*)(int x, int y, void *data)  FIXME: this type?
   (c-define-type ppi-changed-callback (function (int void*) void)); void(*)(int ppi, void *data)  FIXME: this type?
 
@@ -53,16 +61,16 @@
   (define-const KINC_WINDOW_FEATURE_BORDERLESS)
   (define-const KINC_WINDOW_FEATURE_ON_TOP)
 
-  (define-c-struct kinc_framebuffer_options_t
+  (define-c-struct kinc_framebuffer_options
     ((frequency . int)
      (vertical_sync . bool)
      (color_bits . int)
      (depth_bits . int)
      (stencil_bits . int)
      (samples_per_pixel . int))
-    #f #f 'as-typedef)
+    #f (kinc_framebuffer_options_t))
 
-  (define-c-struct kinc_window_options_t
+  (define-c-struct kinc_window_options
     ((title . char*) ; TODO: const char *title; - deal with const?
      (x . int)
      (y . int)
@@ -72,7 +80,7 @@
      (visible . bool)
      (window_features . int)
      (mode . kinc_window_mode_t))
-    #f #f 'as-typedef)
+    #f (kinc_window_options_t))
 
   (define-c-lambda kinc-window-create (kinc_window_options_t* kinc_framebuffer_options_t*) int "kinc_window_create")
   (define-c-lambda kinc-window-destroy (int) void "kinc_window_destroy")
